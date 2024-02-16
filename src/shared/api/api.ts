@@ -1,7 +1,8 @@
 import axios, { AxiosError } from 'axios'
 
 export const api = axios.create({
-  baseURL: import.meta.env.VITE_APP_API_URL,
+  // baseURL: import.meta.env.VITE_APP_API_URL,
+  baseURL: 'https://apiarcha.bobo.tj/api',
 })
 
 api.interceptors.response.use(
