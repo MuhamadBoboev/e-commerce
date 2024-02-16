@@ -1,4 +1,5 @@
 import { Breadcrumb, Layout, Menu, theme } from 'antd'
+import { Outlet } from 'react-router-dom'
 
 const { Header, Content, Footer } = Layout
 
@@ -33,7 +34,14 @@ export const AppLayout = () => {
           style={{ flex: 1, minWidth: 0 }}
         />
       </Header>
-      <Content style={{ padding: '0 48px' }}>
+      <Content style={
+        {
+          padding: '0 10px',
+          maxWidth: '1400px',
+          margin: '0 auto',
+          width: '100%'
+        }
+      }>
         <Breadcrumb style={{ margin: '16px 0' }}>
           <Breadcrumb.Item>Home</Breadcrumb.Item>
           <Breadcrumb.Item>List</Breadcrumb.Item>
@@ -47,11 +55,11 @@ export const AppLayout = () => {
             borderRadius: borderRadiusLG,
           }}
         >
-          Content
+          <Outlet />
         </div>
       </Content>
       <Footer style={{ textAlign: 'center' }}>
-        Ant Design ©{new Date().getFullYear()} Created by Ant UED
+        E-commerce ©{new Date().getFullYear()} Created by MuhammadBoboev
       </Footer>
     </Layout>
   )
