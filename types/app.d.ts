@@ -7,3 +7,6 @@ interface ImportMetaEnv {
 interface ImportMeta {
   readonly env: ImportMetaEnv
 }
+
+declare type RootState = ReturnType<typeof store.getState>
+declare type AppDispatch = typeof store.dispatch
