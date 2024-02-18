@@ -18,6 +18,7 @@ export const AppRouter = () => {
         {renderRoutes(withLayout)}
       </Route>
       {renderRoutes(withoutLayout)}
+
     </Routes>
   )
 }
