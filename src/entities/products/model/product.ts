@@ -10,4 +10,5 @@ export interface Product {
   category: Category
   brand: Brand
   slug: string
+  discount: number
 }
