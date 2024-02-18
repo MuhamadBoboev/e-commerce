@@ -1,66 +1,63 @@
-import { useQuery } from 'react-query';
-import { Col, Pagination, Row } from 'antd'
+import { useState } from 'react'
+import { useQuery } from 'react-query'
+import { Pagination, Row, Spin } from 'antd'
 
-import { Product, ProductCard } from '@entities/products'
-import { Api, Keys } from '@shared/api'
-import { WithPagination, useAppSelector } from '@shared/model'
-import { useEffect, useState } from 'react';
-import { ProductsFilter } from '@features/product-filters';
-import { getProducts } from '@pages/products';
+import { ProductsFilter } from '@features/product-filters'
+import { Product } from '@entities/products'
+import { Api, getQuery, Keys } from '@shared/api'
+import { useAppSelector, WithPagination } from '@shared/model'
+import { SectionTitle } from '@shared/ui'
 
+import { ProductItems } from './product-items'
 
 export const Main = () => {
   const [page, setPage] = useState<number>(1)
   const [pageSize, setPageSize] = useState<number>(10)
-  const { price, brand, category } = useAppSelector(state => state.filter)
-  let filterApi: string = Api.products
+  const { price, brand, category } = useAppSelector((state) => state.filter)
+
+  let filterApi: string = Api.products + `?page=${page}&per_page=${pageSize}`
   if (category !== null) {
-    filterApi = filterApi + `?category_id[]=${category}`
+    filterApi += `&category_id[]=${category}`
   }
   if (brand !== null) {
-    filterApi = filterApi + `&brand_id[]=${brand}`
+    filterApi += `&brand_id[]=${brand}`
   }
   const { data, isLoading, isError } = useQuery({
     queryKey: [[Keys.products], page, category, brand, pageSize],
-    queryFn: getProducts<WithPagination<Product>>(filterApi, page, pageSize),
+    queryFn: getQuery<WithPagination<Product>>(filterApi),
     refetchOnWindowFocus: false,
   })
-  useEffect(() => {
-  }, [page])
-  if (isLoading) {
-    return <p>Идет загрузка ...</p>
-  }
 
+  if (isLoading) {
+    return (
+      <Spin
+        tip="Loading"
+        size="default"
+      >
+        <div className="content" />
+      </Spin>
+    )
+  }
   if (isError) {
     return <p>Ошибка</p>
   }
-
   if (!data) {
     return <p>Нет товаров</p>
   }
 
-  const filteredProducts = data.data.filter(product => product.base_price < price)
+  const filteredProducts = data.data.filter(
+    (product) => product.base_price < price,
+  )
+
   return (
-    <div>
-      <ProductsFilter
-      />
+    <Row gutter={[24, 24]}>
+      <SectionTitle title="Главная" />
+      <ProductsFilter />
+      <ProductItems products={filteredProducts} />
       <Row
-        gutter={[16, 16]}
-        style={{
-          display: 'grid',
-          gridTemplateColumns: '1fr 1fr 1fr',
-          minWidth: '948px'
-        }}>
-        {filteredProducts.map((product) =>
-          <Col
-            key={product.id}
-            span={1}
-            style={{ width: '100%' }}
-          >
-            <ProductCard product={product} favoriteSlot={<button>+</button>} />
-          </Col>
-        )}
-      </Row>
+        gutter={{ xs: 8, sm: 16, md: 24, lg: 32 }}
+        justify="start"
+      />
       <Pagination
         defaultCurrent={page}
         total={data.meta.total}
@@ -69,10 +66,10 @@ export const Main = () => {
           setPageSize(pageSize)
         }}
         showLessItems
-        showTotal={(total, range) => `${range[0]}-${range[1]} of ${total} items`}
+        showTotal={(total, range) => `${range[0]}-${range[1]} of ${total}`}
         defaultPageSize={pageSize}
         showSizeChanger
       />
-    </div>
+    </Row>
   )
 }

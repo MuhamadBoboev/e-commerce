@@ -1,55 +1,66 @@
+import { useQuery } from 'react-query'
+import { useParams } from 'react-router-dom'
+import { Col, Image, Row, Space, Spin, Typography } from 'antd'
 
-import { Api, Keys } from '@shared/api';
-import { Image, Typography } from 'antd';
-import { useQuery } from 'react-query';
-import { useParams } from 'react-router-dom';
-import { Product as ProductType } from '@entities/products';
-import { getProduct } from '@pages/product';
-import Grid from 'antd/es/card/Grid';
+import { getProduct } from '@pages/product'
+import { CartButton } from '@features/cart'
+import { Product as ProductType } from '@entities/products'
+import { Api, Keys } from '@shared/api'
 
 export const Main = () => {
   const { slug } = useParams()
 
   const { data, isLoading, isError } = useQuery({
-    queryKey: [Keys.product],
+    queryKey: [Keys.products],
     queryFn: getProduct<{ data: ProductType }>(Api.product, slug),
     refetchOnWindowFocus: false,
   })
 
-
-
   if (isLoading) {
-    return <p>Загрузка ...</p>
+    return (
+      <Spin
+        tip="Loading"
+        size="default"
+      >
+        <div className="content" />
+      </Spin>
+    )
   }
-
   if (isError) {
     return <p>Ошибка</p>
   }
-
   if (!data) {
     return <p>Товар не найден</p>
   }
 
-  const { image, name, base_price, brand } = data.data
+  const { image, name, base_price, brand, description } = data.data
 
   return (
-    <Grid
-      style={{
-        display: 'grid',
-        gridTemplateColumns: '1fr 1fr',
-        gridGap: '24px',
-        padding: '10px'
-      }} >
-      <Image src={image} width={'100%'} />
-      <Grid style={{
-        display: 'flex',
-        flexDirection: 'column',
-        gridGap: '16px'
-      }}>
-        <Typography.Title>{name}</Typography.Title>
-        <Typography.Text>Цена товара: {base_price}сомони</Typography.Text>
-        <Typography.Text>Бренд: {brand.name}</Typography.Text>
-      </Grid>
-    </Grid>
+    <Row
+      gutter={[16, 32]}
+      justify="space-around"
+    >
+      <Col md={8}>
+        <Image
+          src={image}
+          alt={name}
+          width={310}
+          height={250}
+        />
+      </Col>
+      <Col md={12}>
+        <Col>
+          <Space direction="vertical">
+            <Typography.Title style={{ textTransform: 'uppercase' }}>
+              {name}
+            </Typography.Title>
+            <Typography.Paragraph>{description}</Typography.Paragraph>
+            <Typography.Text>Цена: {base_price}сомони</Typography.Text>
+            <Typography.Text>Бренд: {brand.name}</Typography.Text>
+            <CartButton product={data.data} />
+          </Space>
+        </Col>
+      </Col>
+    </Row>
   )
 }
