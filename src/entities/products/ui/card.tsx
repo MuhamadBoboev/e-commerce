@@ -35,7 +35,7 @@ export const Card = ({ product, cartSlot, favoriteSlot }: Props) => {
         size={16}
       >
         <AntCard.Meta
-          avatar={<Avatar src={image} />}
+          avatar={<Avatar src={image} alt={name} style={{ width: '35px', height: '35px' }} />}
           title={name}
           description={description.slice(0, 50)}
         />
