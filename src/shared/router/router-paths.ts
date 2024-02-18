@@ -1,5 +1,7 @@
 export enum RouterPaths {
   products = '/',
-  product = '/product/:slug',
+  cart = '/cart',
+  favorite = '/favorite',
+  product = '/products/:slug',
   login = '/auth/login',
 }

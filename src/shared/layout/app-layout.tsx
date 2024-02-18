@@ -1,13 +1,21 @@
-import { Breadcrumb, Layout, Menu, theme } from 'antd'
-import { Outlet } from 'react-router-dom'
+import { Layout, Menu, theme } from 'antd'
+import { Link, Outlet } from 'react-router-dom'
 
 const { Header, Content, Footer } = Layout
-
-const items = new Array(3).fill(null).map((_, index) => ({
-  key: String(index + 1),
-  label: `nav ${index + 1}`,
-}))
-
+const items = [
+  {
+    key: 'main',
+    label: <Link to='/'>Главная</Link>,
+  },
+  {
+    key: 'cart',
+    label: <Link to='/cart'>Корзина</Link>,
+  },
+  {
+    key: 'favorite',
+    label: <Link to='/favorite'>Избранное</Link>,
+  }
+]
 export const AppLayout = () => {
   const {
     token: { colorBgContainer, borderRadiusLG },
@@ -17,36 +25,36 @@ export const AppLayout = () => {
     <Layout>
       <Header
         style={{
-          position: 'sticky',
+          position: "fixed",
           top: 0,
-          zIndex: 1,
+          zIndex: 10,
+          maxWidth: '1400px',
+          margin: '0 auto',
           width: '100%',
           display: 'flex',
           alignItems: 'center',
+          left: '50%',
+          padding: '0 10px',
+          transform: 'translate(-50%, 0)'
         }}
       >
         <div className="demo-logo" />
         <Menu
           theme="dark"
           mode="horizontal"
-          defaultSelectedKeys={['2']}
+          defaultSelectedKeys={['1']}
           items={items}
           style={{ flex: 1, minWidth: 0 }}
         />
       </Header>
       <Content style={
         {
-          padding: '0 10px',
           maxWidth: '1400px',
           margin: '0 auto',
-          width: '100%'
+          width: '100%',
+          paddingTop: '64px'
         }
       }>
-        <Breadcrumb style={{ margin: '16px 0' }}>
-          <Breadcrumb.Item>Home</Breadcrumb.Item>
-          <Breadcrumb.Item>List</Breadcrumb.Item>
-          <Breadcrumb.Item>App</Breadcrumb.Item>
-        </Breadcrumb>
         <div
           style={{
             padding: 24,
