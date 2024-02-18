@@ -1,1 +1,1 @@
-export { Filter as ProductsFilter } from './ui/Filter'
+export { Filter as ProductsFilter } from './ui'

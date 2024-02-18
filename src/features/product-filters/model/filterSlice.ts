@@ -10,7 +10,7 @@ const initialState: FilterSliceState = {
   brand: null,
   category: null,
 }
-export const filterSlice = createSlice({
+export const slice = createSlice({
   name: 'filter',
   initialState,
   reducers: {
@@ -26,4 +26,4 @@ export const filterSlice = createSlice({
   },
 })
 
-export const { setPrice, setBrand, setCategory } = filterSlice.actions
+export const { setPrice, setBrand, setCategory } = slice.actions
