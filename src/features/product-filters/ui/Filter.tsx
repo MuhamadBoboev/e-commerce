@@ -13,12 +13,12 @@ export const Filter = () => {
   const dispatch = useDispatch()
 
   const { data: dataCategory, isLoading: isLoadingCategory } = useQuery({
-    queryKey: [[Keys.categories]],
+    queryKey: [Keys.categories],
     queryFn: getQuery<WithPagination<Category>>(Api.categories),
     refetchOnWindowFocus: false,
   })
   const { data: dataBrand, isLoading: isLoadingBrand } = useQuery({
-    queryKey: [[Keys.brands]],
+    queryKey: [Keys.brands],
     queryFn: getQuery<WithPagination<Category>>(Api.brands),
     refetchOnWindowFocus: false,
   })
@@ -34,7 +34,7 @@ export const Filter = () => {
     )
   }
   if (!dataCategory || !dataBrand) {
-    return <p>Нет товаров</p>
+    return <p>Нет категории или бренда</p>
   }
 
   return (
@@ -52,7 +52,7 @@ export const Filter = () => {
             onChange={(element) => {
               dispatch(setCategory(element))
             }}
-            defaultValue={category}
+            value={category}
           >
             {dataCategory.data.map((category) => (
               <Select.Option
@@ -69,7 +69,7 @@ export const Filter = () => {
             onChange={(element) => {
               dispatch(setBrand(element))
             }}
-            defaultValue={brand}
+            value={brand}
           >
             {dataBrand.data.map((brand) => (
               <Select.Option

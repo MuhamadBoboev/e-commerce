@@ -1,4 +1,4 @@
-import { createSlice, PayloadAction } from '@reduxjs/toolkit'
+import { createAsyncThunk, createSlice, PayloadAction } from '@reduxjs/toolkit'
 
 import { Product } from '@entities/products'
 
@@ -29,6 +29,22 @@ const initialState: FavoriteSliceState = {
   },
   status: 'idle',
 }
+export const getFavoriteProducts = createAsyncThunk(
+  'favorite/getFavoriteStorage',
+  async () => {
+    try {
+      const favoriteProductsStorage = localStorage.getItem('favoriteProducts')
+      if (favoriteProductsStorage) {
+        const parsedData = JSON.parse(favoriteProductsStorage)
+        return parsedData
+      }
+      return []
+    } catch (error) {
+      console.error('Error parsing cartProductsStorage:', error)
+      throw error
+    }
+  },
+)
 
 export const slice = createSlice({
   name: 'favorite',
@@ -54,37 +70,20 @@ export const slice = createSlice({
       state.favoritesProducts = []
     },
   },
-  // extraReducers: (builder) => {
-  //   builder
-  //     .addCase(getFavoriteProducts.pending, (state) => {
-  //       state.status = 'pending'
-  //     })
-  //     .addCase(getFavoriteProducts.fulfilled, (state, action) => {
-  //       state.status = 'fulfilled'
-  //       state.favoritesProducts = action.payload
-  //     })
-  //     .addCase(getFavoriteProducts.rejected, (state) => {
-  //       state.status = 'rejected'
-  //       state.favoritesProducts = []
-  //     })
-  // },
+  extraReducers: (builder) => {
+    builder
+      .addCase(getFavoriteProducts.pending, (state) => {
+        state.status = 'pending'
+      })
+      .addCase(getFavoriteProducts.fulfilled, (state, action) => {
+        state.status = 'fulfilled'
+        state.favoritesProducts = action.payload
+      })
+      .addCase(getFavoriteProducts.rejected, (state) => {
+        state.status = 'rejected'
+        state.favoritesProducts = []
+      })
+  },
 })
-
-// export const getFavoriteProducts = createAsyncThunk(
-//   'getFavoriteStorage',
-//   async () => {
-//     try {
-//       const favoriteProductsStorage = localStorage.getItem('favoriteProducts')
-//       if (favoriteProductsStorage) {
-//         const parsedData = JSON.parse(favoriteProductsStorage)
-//         return parsedData
-//       }
-//       return []
-//     } catch (error) {
-//       console.error('Error parsing cartProductsStorage:', error)
-//       throw error
-//     }
-//   },
-// )
 
 export const { toggleFavorite, clearFavorite } = slice.actions

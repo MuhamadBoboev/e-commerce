@@ -1,4 +1,4 @@
-import { createSlice, PayloadAction } from '@reduxjs/toolkit'
+import { createAsyncThunk, createSlice, PayloadAction } from '@reduxjs/toolkit'
 
 import { Product } from '@entities/products'
 
@@ -30,6 +30,22 @@ const initialState: CartSliceState = {
   status: 'idle',
 }
 
+export const getCartProducts = createAsyncThunk(
+  'cart/getCartStorage',
+  async () => {
+    try {
+      const cartProductsStorage = localStorage.getItem('cartProducts')
+      if (cartProductsStorage) {
+        const parsedData = JSON.parse(cartProductsStorage)
+        return parsedData
+      }
+      return []
+    } catch (error) {
+      console.error('Error parsing cartProductsStorage:', error)
+      throw error
+    }
+  },
+)
 export const slice = createSlice({
   name: 'cart',
   initialState,
@@ -51,37 +67,20 @@ export const slice = createSlice({
       state.cartProducts = []
     },
   },
-  // extraReducers: (builder) => {
-  //   builder
-  //     .addCase(getFavoriteProducts.pending, (state) => {
-  //       state.status = 'pending'
-  //     })
-  //     .addCase(getFavoriteProducts.fulfilled, (state, action) => {
-  //       state.status = 'fulfilled'
-  //       state.favoritesProducts = action.payload
-  //     })
-  //     .addCase(getFavoriteProducts.rejected, (state) => {
-  //       state.status = 'rejected'
-  //       state.favoritesProducts = []
-  //     })
-  // },
+  extraReducers: (builder) => {
+    builder
+      .addCase(getCartProducts.pending, (state) => {
+        state.status = 'pending'
+      })
+      .addCase(getCartProducts.fulfilled, (state, action) => {
+        state.status = 'fulfilled'
+        state.cartProducts = action.payload
+      })
+      .addCase(getCartProducts.rejected, (state) => {
+        state.status = 'rejected'
+        state.cartProducts = []
+      })
+  },
 })
-
-// export const getFavoriteProducts = createAsyncThunk(
-//   'getFavoriteStorage',
-//   async () => {
-//     try {
-//       const favoriteProductsStorage = localStorage.getItem('favoriteProducts')
-//       if (favoriteProductsStorage) {
-//         const parsedData = JSON.parse(favoriteProductsStorage)
-//         return parsedData
-//       }
-//       return []
-//     } catch (error) {
-//       console.error('Error parsing cartProductsStorage:', error)
-//       throw error
-//     }
-//   },
-// )
 
 export const { toggleCart, clearCart } = slice.actions

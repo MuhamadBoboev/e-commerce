@@ -1,4 +1,4 @@
-import { Action, configureStore, ThunkAction } from '@reduxjs/toolkit'
+import { configureStore } from '@reduxjs/toolkit'
 
 import { cartSlice } from '@features/cart'
 import { favoriteSlice } from '@features/favorite/model'
@@ -16,10 +16,3 @@ export type RootState = ReturnType<typeof store.getState>
 export type AppState = ReturnType<typeof store.getState>
 
 export type AppDispatch = typeof store.dispatch
-
-export type AppThunk<ReturnType = void> = ThunkAction<
-  ReturnType,
-  AppState,
-  unknown,
-  Action<string>
->

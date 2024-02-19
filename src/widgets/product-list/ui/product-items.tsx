@@ -8,7 +8,6 @@ interface Props {
   products: Product[]
 }
 export const ProductItems = ({ products }: Props) => {
-
   return (
     <Row
       gutter={{ xs: 8, sm: 16, md: 24, lg: 32 }}
@@ -24,18 +23,8 @@ export const ProductItems = ({ products }: Props) => {
         >
           <ProductCard
             product={product}
-            cartSlot={
-              <CartButton
-                key={product.id}
-                product={product}
-              />
-            }
-            favoriteSlot={
-              <FavoriteButton
-                key={product.id}
-                product={product}
-              />
-            }
+            cartSlot={<CartButton product={product} />}
+            favoriteSlot={<FavoriteButton product={product} />}
           />
         </Col>
       ))}

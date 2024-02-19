@@ -13,7 +13,7 @@ interface Props {
 export const Cart = ({ product }: Props) => {
   const [isToggle, setToggle] = useState(false)
   const { cartProducts } = useAppSelector((state) => state.cart)
-  const isFavorite = cartProducts.includes(product)
+  const isExist = cartProducts.find(({ id }) => id === product.id)
   const [messageApi, contextHolder] = message.useMessage()
 
   const dispatch = useDispatch()
@@ -25,9 +25,12 @@ export const Cart = ({ product }: Props) => {
   }
 
   const info = () => {
-    isFavorite
-      ? messageApi.error('Удалено!')
-      : messageApi.success('Добавлено в корзину!')
+    // eslint-disable-next-line @typescript-eslint/no-unused-expressions
+    if (isExist) {
+      messageApi.error('Удалено!')
+    } else {
+      messageApi.success('Добавлено в избранное!')
+    }
   }
   return (
     <Button
@@ -45,7 +48,7 @@ export const Cart = ({ product }: Props) => {
       }}
     >
       {contextHolder}
-      {isFavorite ? 'Удалить' : 'Добавить в корзину'}
+      {isExist ? 'Удалить' : 'Добавить в корзину'}
     </Button>
   )
 }

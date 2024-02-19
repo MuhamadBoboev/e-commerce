@@ -11,7 +11,15 @@ module.exports = configure({
           ['^react', '^@?\\w'],
 
           // common aliases (@app, @root, @/, ~/) and anything not matched
-          ['@app', '@pages', '@widgets', '@features', '@entities', '@shared', '@public'],
+          [
+            '@app',
+            '@pages',
+            '@widgets',
+            '@features',
+            '@entities',
+            '@shared',
+            '@public',
+          ],
 
           // relative imports
           ['^\\.'],

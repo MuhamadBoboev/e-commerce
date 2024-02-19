@@ -41,18 +41,8 @@ export const Main = () => {
           >
             <ProductCard
               product={product}
-              cartSlot={
-                <CartButton
-                  key={product.id}
-                  product={product}
-                />
-              }
-              favoriteSlot={
-                <FavoriteButton
-                  key={product.id}
-                  product={product}
-                />
-              }
+              cartSlot={<CartButton product={product} />}
+              favoriteSlot={<FavoriteButton product={product} />}
             />
           </Col>
         ))}

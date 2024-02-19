@@ -14,7 +14,8 @@ interface Props {
 export const Favorite = ({ product }: Props) => {
   const [isToggle, setToggle] = useState(false)
   const { favoritesProducts } = useAppSelector((state) => state.favorite)
-  const isFavorite = favoritesProducts.includes(product)
+
+  const isExist = favoritesProducts.find(({ id }) => id === product.id)
   const [messageApi, contextHolder] = message.useMessage()
 
   const dispatch = useDispatch()
@@ -27,9 +28,12 @@ export const Favorite = ({ product }: Props) => {
 
   const info = () => {
     // eslint-disable-next-line @typescript-eslint/no-unused-expressions
-    isFavorite
-      ? messageApi.error('Удалено!')
-      : messageApi.success('Добавлено в избранное!')
+
+    if (isExist) {
+      messageApi.error('Удалено!')
+    } else {
+      messageApi.success('Добавлено в избранное!')
+    }
   }
   return (
     <Button
@@ -53,7 +57,7 @@ export const Favorite = ({ product }: Props) => {
       }}
     >
       {contextHolder}
-      {isFavorite ? <HeartFilled /> : <HeartOutlined />}
+      {isExist ? <HeartFilled /> : <HeartOutlined />}
     </Button>
   )
 }

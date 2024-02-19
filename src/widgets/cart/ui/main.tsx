@@ -1,11 +1,11 @@
 import { Col, Row } from 'antd'
 
 import { CartButton, CartClear } from '@features/cart'
+import { FavoriteButton } from '@features/favorite'
 import { Product, ProductCard, ProductsInfo } from '@entities/products'
 import { sumTotalValues } from '@shared/lib'
 import { useAppSelector } from '@shared/model'
 import { SectionTitle } from '@shared/ui'
-import { FavoriteButton } from '@features/favorite'
 
 export const Main = () => {
   const { cartProducts } = useAppSelector((state) => state.cart)
@@ -41,18 +41,8 @@ export const Main = () => {
           >
             <ProductCard
               product={product}
-              cartSlot={
-                <CartButton
-                  key={product.id}
-                  product={product}
-                />
-              }
-              favoriteSlot={
-                <FavoriteButton
-                  key={product.id}
-                  product={product}
-                />
-              }
+              cartSlot={<CartButton product={product} />}
+              favoriteSlot={<FavoriteButton product={product} />}
             />
           </Col>
         ))}
